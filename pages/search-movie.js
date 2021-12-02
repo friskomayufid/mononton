@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
 import styles from "../styles/Home.module.css";
 import { Layout, Menu, Button, Row, Col, Card, Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
@@ -9,74 +9,69 @@ import { API_KEY, API_URL, IMAGE_URL } from "../utils/config";
 import axios from "axios";
 const { Header, Footer } = Layout;
 const { Search } = Input;
+import HeaderComponent from "../components/Header";
 
 export default function Home() {
-  const router = useRouter()
+  const router = useRouter();
 
   const onSearch = (value) => console.log(value);
-  const [queryMovie, setQueryMovie] = useState(router.query.movie)
+  const [queryMovie, setQueryMovie] = useState(router.query.movie);
   const [movies, setMovies] = useState([]);
   const [popularMovie, setPopularMovie] = useState([]);
 
-  console.log(queryMovie)
+  console.log(queryMovie);
 
   const fetchMovie = () => {
     axios
-    .get(
-      `${API_URL}search/movie?api_key=${API_KEY}&query=${queryMovie ? queryMovie : router.query.movie}&language=en-US&page=1&include_adult=false`,
-    )
-    .then(function (response) {
-      setMovies(response.data.results.slice(0, 9));
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  }
+      .get(
+        `${API_URL}search/movie?api_key=${API_KEY}&query=${
+          queryMovie ? queryMovie : router.query.movie
+        }&language=en-US&page=1&include_adult=false`
+      )
+      .then(function (response) {
+        setMovies(response.data.results.slice(0, 9));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   useEffect(() => {
     axios
-    .get(
-      `${API_URL}search/movie?api_key=${API_KEY}&query=${queryMovie ? queryMovie : router.query.movie}&language=en-US&page=1&include_adult=false`,
-    )
-    .then(function (response) {
-      setMovies(response.data.results.slice(0, 9));
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+      .get(
+        `${API_URL}search/movie?api_key=${API_KEY}&query=${
+          queryMovie ? queryMovie : router.query.movie
+        }&language=en-US&page=1&include_adult=false`
+      )
+      .then(function (response) {
+        setMovies(response.data.results.slice(0, 9));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }, []);
 
   const handleQuery = (e) => {
-    setQueryMovie(e.target.value)
-  }
+    setQueryMovie(e.target.value);
+  };
 
   const handleSearch = (e) => {
-    router.push(`/search-movie?movie=${queryMovie}`)
-    fetchMovie()
-  }
+    router.push(`/search-movie?movie=${queryMovie}`);
+    fetchMovie();
+  };
 
   return (
     <div className={styles.container}>
-      <Head>
-        <title>Mononton || Search Movie</title>
-        <meta name="description" content="Mononton || Search Movie" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <Header className={styles.header}>
-        <h1 className={styles.logo}>Mononton</h1>
-        <Menu mode="horizontal">
-          <Menu.Item key="Movie">{`Movie`}</Menu.Item>
-          <Menu.Item key="Series">{`Series`}</Menu.Item>
-          <Menu.Item key="Popular Actors">
-            <Button>Popular Actors</Button>
-          </Menu.Item>
-        </Menu>
-      </Header>
+      <HeaderComponent />
       <main>
         <div className={`${styles.card} ${styles.cardSearch}`}>
           <Row gutter={[16, 16]} className={styles.searchRow}>
             <Col md={20}>
-              <Input placeholder="Cari Film Favorit Kamu Disini ..." value={queryMovie} onChange={handleQuery} />
+              <Input
+                placeholder="Cari Film Favorit Kamu Disini ..."
+                value={queryMovie}
+                onChange={handleQuery}
+              />
             </Col>
             <Col md={4} className="text-center">
               <Button type="primary" onClick={handleSearch}>
