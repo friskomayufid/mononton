@@ -7,41 +7,43 @@ import { Layout, Menu, Button, Row, Col, Card, Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { API_KEY, API_URL, IMAGE_URL } from "../utils/config";
 import axios from "axios";
-
 const { Header, Footer } = Layout;
 const { Search } = Input;
 
 export default function Home() {
   const router = useRouter()
+
   const onSearch = (value) => console.log(value);
-  const [nowPlay, setNowPlay] = useState([]);
-  const [queryMovie, setQueryMovie] = useState('');
+  const [queryMovie, setQueryMovie] = useState(router.query.movie)
+  const [movies, setMovies] = useState([]);
   const [popularMovie, setPopularMovie] = useState([]);
 
-  useEffect(() => {
-    // Get Now Playing
-    axios
-      .get(
-        `${API_URL}movie/now_playing?api_key=${API_KEY}&language=en-US&page=1`
-      )
-      .then(function (response) {
-        setNowPlay(response.data.results.slice(0, 6));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+  console.log(queryMovie)
 
-    // Get Popular Movie
+  const fetchMovie = () => {
     axios
-      .get(
-        `${API_URL}movie/popular?api_key=${API_KEY}&language=en-US&page=1`
-      )
-      .then(function (response) {
-        setPopularMovie(response.data.results.slice(7, 16));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    .get(
+      `${API_URL}search/movie?api_key=${API_KEY}&query=${queryMovie ? queryMovie : router.query.movie}&language=en-US&page=1&include_adult=false`,
+    )
+    .then(function (response) {
+      setMovies(response.data.results.slice(0, 9));
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  useEffect(() => {
+    axios
+    .get(
+      `${API_URL}search/movie?api_key=${API_KEY}&query=${queryMovie ? queryMovie : router.query.movie}&language=en-US&page=1&include_adult=false`,
+    )
+    .then(function (response) {
+      setMovies(response.data.results.slice(0, 9));
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   }, []);
 
   const handleQuery = (e) => {
@@ -50,13 +52,14 @@ export default function Home() {
 
   const handleSearch = (e) => {
     router.push(`/search-movie?movie=${queryMovie}`)
+    fetchMovie()
   }
 
   return (
     <div className={styles.container}>
       <Head>
-        <title>Mononton</title>
-        <meta name="description" content="Mononton" />
+        <title>Mononton || Search Movie</title>
+        <meta name="description" content="Mononton || Search Movie" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header className={styles.header}>
@@ -70,14 +73,10 @@ export default function Home() {
         </Menu>
       </Header>
       <main>
-        <div className={styles.jumbotron}>
-          <img src="/images/banner.png" alt="banner" width="100%" />
-          <h1>Cari Film Favorit Kamu di Mononton!</h1>
-        </div>
-        <div className={styles.card}>
-          <Row gutter={[16, 16]}>
+        <div className={`${styles.card} ${styles.cardSearch}`}>
+          <Row gutter={[16, 16]} className={styles.searchRow}>
             <Col md={20}>
-              <Input placeholder="Cari Film Favorit Kamu Disini ..." onChange={handleQuery} />
+              <Input placeholder="Cari Film Favorit Kamu Disini ..." value={queryMovie} onChange={handleQuery} />
             </Col>
             <Col md={4} className="text-center">
               <Button type="primary" onClick={handleSearch}>
@@ -89,44 +88,10 @@ export default function Home() {
         <div>
           <Row gutter={[64, 32]}>
             <Col md={24}>
-              <h1 className="text-center font-bold">Film Sedang Tayang Hari Ini</h1>
+              <h1 className="text-center font-bold">Hasil Pencarian</h1>
             </Col>
-            {nowPlay
-              ? nowPlay.map((movie) => {
-                  return (
-                    <Col md={8} key={movie.id}>
-                      <div className={styles.movieCard}>
-                        <img
-                          src={IMAGE_URL + movie.poster_path}
-                          alt="banner"
-                          width="100%"
-                          style={{ borderRadius: 10 }}
-                        />
-                        <p>{movie.title}</p>
-                        <Row>
-                          <Col md={12}>
-                            <span className={styles.rating}>
-                              {movie.vote_average} Ratings
-                            </span>
-                          </Col>
-                          <Col md={12} className="text-right">
-                            <span className={styles.date}>
-                              {movie.release_date}
-                            </span>
-                          </Col>
-                        </Row>
-                      </div>
-                    </Col>
-                  );
-                })
-              : "No Data"}
-          </Row>
-          <Row gutter={[64, 32]}>
-            <Col md={24}>
-              <h1 className="text-center font-bold">Film Populer</h1>
-            </Col>
-            {popularMovie
-              ? popularMovie.map((movie) => {
+            {movies
+              ? movies.map((movie) => {
                   return (
                     <Col md={8} key={movie.id}>
                       <div className={styles.movieCard}>
