@@ -18,6 +18,23 @@
   width: 100%;
 }
 
+.select {
+  margin-top: 10px;
+  width: 200px !important;
+}
+
+.menu {
+  color: #fc8868 !important;
+  font-weight: bold;
+}
+
+.button {
+  color: #fc8868 !important;
+    border-radius: 10px;
+    font-weight: bold;
+    border: 2px solid #fc8868;
+}
+
 .jumbotron {
   position: relative;
   text-align: center;

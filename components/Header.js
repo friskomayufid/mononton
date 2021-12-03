@@ -19,21 +19,21 @@ export default function HeaderComponent() {
             <h1 className={styles.logo}>Mononton</h1>
           </a>
         </Link>
-        <Menu mode="horizontal">
+        <Menu mode="horizontal" style={{float: 'right'}}>
           <Link href="/search-movie?movie=venom">
-            <a>
-              <Menu.Item key="Movie">{`Movie`}</Menu.Item>
+            <a >
+              <Menu.Item key="Movie" className={styles.menu}>{`Movie`}</Menu.Item>
             </a>
           </Link>
           <Link href="/search-series?series=squid">
-            <a>
-              <Menu.Item key="Series">{`Series`}</Menu.Item>
+            <a >
+              <Menu.Item key="Series" className={styles.menu}>{`Series`}</Menu.Item>
             </a>
           </Link>
-          <Link href="/actors?movie=squid">
+          <Link href="/actors">
             <a>
               <Menu.Item key="Popular Actors">
-                <Button>Popular Actors</Button>
+                <Button className={styles.button}>Popular Actors</Button>
               </Menu.Item>
             </a>
           </Link>

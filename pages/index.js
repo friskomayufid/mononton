@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import styles from "../styles/Home.module.css";
-import { Layout, Menu, Button, Row, Col, Card, Input } from "antd";
+import { Layout, Menu, Button, Row, Col, Card, Input, Select } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { API_KEY, API_URL, IMAGE_URL } from "../utils/config";
 import axios from "axios";
@@ -10,12 +10,14 @@ import HeaderComponent from "../components/Header";
 
 const { Footer } = Layout;
 const { Search } = Input;
+const { Option } = Select;
 
 export default function Home() {
   const router = useRouter();
   const onSearch = (value) => console.log(value);
   const [nowPlay, setNowPlay] = useState([]);
   const [queryMovie, setQueryMovie] = useState("");
+  const [category, setCategory] = useState("movie")
   const [popularMovie, setPopularMovie] = useState([]);
 
   useEffect(() => {
@@ -47,7 +49,15 @@ export default function Home() {
   };
 
   const handleSearch = (e) => {
-    router.push(`/search-movie?movie=${queryMovie}`);
+    if (category === 'movie') {
+      router.push(`/search-movie?movie=${queryMovie}`);
+    } else {
+      router.push(`/search-series?series=${queryMovie}`);
+    }
+  };
+
+  const handleChange = (value) => {
+    setCategory(value)
   };
 
   return (
@@ -65,6 +75,15 @@ export default function Home() {
                 placeholder="Cari Film Favorit Kamu Disini ..."
                 onChange={handleQuery}
               />
+              <Select
+                defaultValue="movie"
+                style={{ width: 120 }}
+                onChange={handleChange}
+                className={styles.select}
+              >
+                <Option value="movie">Movie</Option>
+                <Option value="series">Series</Option>
+              </Select>
             </Col>
             <Col md={4} className="text-center">
               <Button type="primary" onClick={handleSearch}>
