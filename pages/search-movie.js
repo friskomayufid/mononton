@@ -10,6 +10,7 @@ import axios from "axios";
 const { Header, Footer } = Layout;
 const { Search } = Input;
 import HeaderComponent from "../components/Header";
+import Link from "next/link";
 
 export default function Home() {
   const router = useRouter();
@@ -89,27 +90,29 @@ export default function Home() {
               ? movies.map((movie) => {
                   return (
                     <Col md={8} key={movie.id}>
-                      <div className={styles.movieCard}>
-                        <img
-                          src={IMAGE_URL + movie.poster_path}
-                          alt="banner"
-                          width="100%"
-                          style={{ borderRadius: 10 }}
-                        />
-                        <p>{movie.title}</p>
-                        <Row>
-                          <Col md={12}>
-                            <span className={styles.rating}>
-                              {movie.vote_average} Ratings
-                            </span>
-                          </Col>
-                          <Col md={12} className="text-right">
-                            <span className={styles.date}>
-                              {movie.release_date}
-                            </span>
-                          </Col>
-                        </Row>
-                      </div>
+                      <Link href={`/movie/${movie.id}`}>
+                        <div className={styles.movieCard}>
+                          <img
+                            src={IMAGE_URL + movie.poster_path}
+                            alt="banner"
+                            width="100%"
+                            style={{ borderRadius: 10 }}
+                          />
+                          <p>{movie.title}</p>
+                          <Row>
+                            <Col md={12}>
+                              <span className={styles.rating}>
+                                {movie.vote_average} Ratings
+                              </span>
+                            </Col>
+                            <Col md={12} className="text-right">
+                              <span className={styles.date}>
+                                {movie.release_date}
+                              </span>
+                            </Col>
+                          </Row>
+                        </div>
+                      </Link>
                     </Col>
                   );
                 })

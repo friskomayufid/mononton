@@ -30,9 +30,9 @@
 
 .button {
   color: #fc8868 !important;
-    border-radius: 10px;
-    font-weight: bold;
-    border: 2px solid #fc8868;
+  border-radius: 10px;
+  font-weight: bold;
+  border: 2px solid #fc8868;
 }
 
 .jumbotron {
@@ -103,7 +103,7 @@
 }
 
 .movieCardActive {
-  border: 2px solid #3A8375;
+  border: 2px solid #3a8375;
   border-radius: 20px;
 }
 
@@ -118,11 +118,36 @@
 .movieCard .rating {
   font-size: 14px;
   line-height: 30px;
-  color: #ADADAD;
+  color: #adadad;
 }
 
 .movieCard .date {
   font-size: 14px;
   line-height: 30px;
-  color: #ADADAD;
+  color: #adadad;
+}
+
+.detailMovieWrap {
+  width: 90%;
+  margin-top: 50px;
+}
+.detailMovieWrap h1{
+  font-size: 40px;
+}
+.detailMovieWrap .title{
+  font-size: 50px;
+  color: #fc8868;
+  padding-left: 30px;
+  line-height: 1;
+  text-align: center;
+}
+.detailMovieWrap img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+}
+
+.container a {
+  cursor: pointer;
 }

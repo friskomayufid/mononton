@@ -7,6 +7,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import { API_KEY, API_URL, IMAGE_URL } from "../utils/config";
 import axios from "axios";
 import HeaderComponent from "../components/Header";
+import Link from "next/link";
 
 const { Footer } = Layout;
 const { Search } = Input;
@@ -17,8 +18,9 @@ export default function Home() {
   const onSearch = (value) => console.log(value);
   const [nowPlay, setNowPlay] = useState([]);
   const [queryMovie, setQueryMovie] = useState("");
-  const [category, setCategory] = useState("movie")
+  const [category, setCategory] = useState("movie");
   const [popularMovie, setPopularMovie] = useState([]);
+  const [popularSeries, setPopularSeries] = useState([]);
 
   useEffect(() => {
     // Get Now Playing
@@ -42,6 +44,16 @@ export default function Home() {
       .catch(function (error) {
         console.log(error);
       });
+
+    // Get Popular Series
+    axios
+      .get(`${API_URL}tv/popular?api_key=${API_KEY}&language=en-US&page=1`)
+      .then(function (response) {
+        setPopularSeries(response.data.results.slice(7, 16));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }, []);
 
   const handleQuery = (e) => {
@@ -49,7 +61,7 @@ export default function Home() {
   };
 
   const handleSearch = (e) => {
-    if (category === 'movie') {
+    if (category === "movie") {
       router.push(`/search-movie?movie=${queryMovie}`);
     } else {
       router.push(`/search-series?series=${queryMovie}`);
@@ -57,7 +69,7 @@ export default function Home() {
   };
 
   const handleChange = (value) => {
-    setCategory(value)
+    setCategory(value);
   };
 
   return (
@@ -66,7 +78,7 @@ export default function Home() {
       <main>
         <div className={styles.jumbotron}>
           <img src="/images/banner.png" alt="banner" width="100%" />
-          <h1>Cari Film Favorit Kamu di Mononton!</h1>
+          <h1>Cari Film & Series Favorit Kamu di Mononton!</h1>
         </div>
         <div className={styles.card}>
           <Row gutter={[16, 16]}>
@@ -103,27 +115,29 @@ export default function Home() {
               ? nowPlay.map((movie) => {
                   return (
                     <Col md={8} key={movie.id}>
-                      <div className={styles.movieCard}>
-                        <img
-                          src={IMAGE_URL + movie.poster_path}
-                          alt="banner"
-                          width="100%"
-                          style={{ borderRadius: 10 }}
-                        />
-                        <p>{movie.title}</p>
-                        <Row>
-                          <Col md={12}>
-                            <span className={styles.rating}>
-                              {movie.vote_average} Ratings
-                            </span>
-                          </Col>
-                          <Col md={12} className="text-right">
-                            <span className={styles.date}>
-                              {movie.release_date}
-                            </span>
-                          </Col>
-                        </Row>
-                      </div>
+                      <Link href={`/movie/${movie.id}`}>
+                        <div className={styles.movieCard}>
+                          <img
+                            src={IMAGE_URL + movie.poster_path}
+                            alt="banner"
+                            width="100%"
+                            style={{ borderRadius: 10 }}
+                          />
+                          <p>{movie.title}</p>
+                          <Row>
+                            <Col md={12}>
+                              <span className={styles.rating}>
+                                {movie.vote_average} Ratings
+                              </span>
+                            </Col>
+                            <Col md={12} className="text-right">
+                              <span className={styles.date}>
+                                {movie.release_date}
+                              </span>
+                            </Col>
+                          </Row>
+                        </div>
+                      </Link>
                     </Col>
                   );
                 })
@@ -137,27 +151,65 @@ export default function Home() {
               ? popularMovie.map((movie) => {
                   return (
                     <Col md={8} key={movie.id}>
-                      <div className={styles.movieCard}>
-                        <img
-                          src={IMAGE_URL + movie.poster_path}
-                          alt="banner"
-                          width="100%"
-                          style={{ borderRadius: 10 }}
-                        />
-                        <p>{movie.title}</p>
-                        <Row>
-                          <Col md={12}>
-                            <span className={styles.rating}>
-                              {movie.vote_average} Ratings
-                            </span>
-                          </Col>
-                          <Col md={12} className="text-right">
-                            <span className={styles.date}>
-                              {movie.release_date}
-                            </span>
-                          </Col>
-                        </Row>
-                      </div>
+                      <Link href={`/movie/${movie.id}`}>
+                        <div className={styles.movieCard}>
+                          <img
+                            src={IMAGE_URL + movie.poster_path}
+                            alt="banner"
+                            width="100%"
+                            style={{ borderRadius: 10 }}
+                          />
+                          <p>{movie.title}</p>
+                          <Row>
+                            <Col md={12}>
+                              <span className={styles.rating}>
+                                {movie.vote_average} Ratings
+                              </span>
+                            </Col>
+                            <Col md={12} className="text-right">
+                              <span className={styles.date}>
+                                {movie.release_date}
+                              </span>
+                            </Col>
+                          </Row>
+                        </div>
+                      </Link>
+                    </Col>
+                  );
+                })
+              : "No Data"}
+          </Row>
+          <Row gutter={[64, 32]}>
+            <Col md={24}>
+              <h1 className="text-center font-bold">Series Populer</h1>
+            </Col>
+            {popularSeries
+              ? popularSeries.map((movie) => {
+                  return (
+                    <Col md={8} key={movie.id}>
+                      <Link href={`/series/${movie.id}`}>
+                        <div className={styles.movieCard}>
+                          <img
+                            src={IMAGE_URL + movie.poster_path}
+                            alt="banner"
+                            width="100%"
+                            style={{ borderRadius: 10 }}
+                          />
+                          <p>{movie.title}</p>
+                          <Row>
+                            <Col md={12}>
+                              <span className={styles.rating}>
+                                {movie.vote_average} Ratings
+                              </span>
+                            </Col>
+                            <Col md={12} className="text-right">
+                              <span className={styles.date}>
+                                {movie.release_date}
+                              </span>
+                            </Col>
+                          </Row>
+                        </div>
+                      </Link>
                     </Col>
                   );
                 })
